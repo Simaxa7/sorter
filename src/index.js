@@ -1,14 +1,11 @@
 class Sorter {
   constructor(element) {
-    this.element = element;
     this.count = 0;
     this.arr = [];
-
+    this.comparator = (a, b) => a - b
   }
 
   add(element) {
-    this.element = element;
-    this.count++;
     this.arr.push(element);
   }
 
@@ -26,39 +23,33 @@ class Sorter {
 
 
   sort(indices) {
+
     let newArrWithIncludes = [];
+    let maybeArr=[]; 
+    let count=0;
 
-    indices.sort(this.setComparator);
-
+    indices.sort(this.comparator);
     newArrWithIncludes = indices.map((el, ind, indices) => {return this.arr[el]});
+    newArrWithIncludes.sort(this.comparator);
 
-    newArrWithIncludes.sort(this.setComparator);
+    this.arr.map((el, ind)=> {
+      if(indices.includes(ind) ){ 
+          let num = newArrWithIncludes[count];
+          count++;
+          maybeArr.push(num);
+      }else {maybeArr.push(el)}
+    });
 
+    this.arr=[...maybeArr]
 
-      newArrWithIncludes.forEach((el, ind)=>{
-        this.arr[indices[ind]] = el;
-      });
-    
-    this.setComparator=this.setComparatorPlanB;
+    return this.arr
   }
 
-  setComparator(left,right) {
-    
-    if (typeof left == "number" &&  typeof right == "number"){
-      let x = left - right;
-      return x;
-    }else{
-      this.setComparator = left;
-    }
-
+  setComparator(compareFunction) {
+    return this.comparator = compareFunction;
   }
 
   setComparatorPlanB(left,right){
-    if (typeof left == "number" &&  typeof right == "number"){
-      let x = left - right;
-      return x;
-    }else{
-    this.setComparator = left}
   };
 }
 
